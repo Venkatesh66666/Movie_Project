@@ -1,0 +1,88 @@
+/* GLOBAL BACKGROUND */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  min-height: 100vh;
+  color: #ffffff;
+}
+
+/* REMOVE DEFAULT LINK STYLES */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* PAGE CONTAINER SPACING */
+.page-container {
+  padding: 20px 40px;
+}
+
+/* SECTION TITLES */
+.section-title {
+  text-align: center;
+  font-size: 2.4rem;
+  margin: 25px 0;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.6);
+}
+
+/* MOVIE CARD – GLASS EFFECT */
+.movie-card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+}
+
+/* MOVIE POSTER */
+.movie-card img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+}
+
+/* FILTER SIDEBAR */
+.filter-panel {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+/* INPUTS */
+.filter-panel input,
+.filter-panel select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  outline: none;
+}
+
+/* PAGINATION BUTTONS */
+.pagination button {
+  background: linear-gradient(135deg, #ff512f, #dd2476);
+  border: none;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 50%;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.pagination button:hover {
+  transform: scale(1.15);
+}
