@@ -31,7 +31,21 @@ export default function MovieCard({ movie, action }) {
     };*/
 
     return (
-        <Card>
+        <Card
+  sx={{
+    height: "100%",
+    background: "rgba(255, 255, 255, 0.12)",
+    backdropFilter: "blur(12px)",
+    borderRadius: "16px",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+    "&:hover": {
+      transform: "translateY(-10px) scale(1.03)",
+      boxShadow: "0 20px 45px rgba(0,0,0,0.8)",
+    },
+  }}
+>
+
             <CardHeader
                 avatar={
                     movie.favorite ? (
