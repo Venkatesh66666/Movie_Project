@@ -7,18 +7,19 @@ import Typography from "@mui/material/Typography";
 import CardMedia from "@mui/material/CardMedia";
 
 const PeopleCards = (props) => {
-    let peopleCards = props.people.map((p) => (
+    let peopleCards = props.people.map((p, index) => (
 
-        <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Card>
+        <Grid key={p.id} size={{xs: 12, sm: 6, md: 4, lg: 3, xl: 2.4}}>
+            <Card className="fade-in" sx={{height: "100%", animationDelay: `${Math.min(index * 65, 520)}ms`}}>
                 <CardMedia
                     component="img"
                     height="300"
-                    image={`https://image.tmdb.org/t/p/w500${p.profile_path}`}
+                    image={p.profile_path ? `https://image.tmdb.org/t/p/w300${p.profile_path}` : "https://via.placeholder.com/300x450?text=No+Photo"}
                     alt={`${p.name}'s profile picture`}
+                    loading="lazy"
                 />
                 <CardContent>
-                    <Typography variant="h6">
+                    <Typography variant="h6" sx={{fontWeight: 700}}>
                         <Link to={`/people/${p.id}`}>{p.name}</Link>
                     </Typography>
                     <Typography variant="body2" color="textSecondary">

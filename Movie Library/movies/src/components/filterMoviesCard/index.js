@@ -1,8 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
-import Spinner from '../spinner'
+import Spinner from "../spinner";
 import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
@@ -11,143 +10,119 @@ import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import img from '../../images/pexels-dziana-hasanbekava-5480827.jpg'
 import { getGenres } from "../../api/tmdb-api";
-import {FormControlLabel, FormLabel, InputAdornment, OutlinedInput, Radio, RadioGroup, Slider} from "@mui/material";
+import { FormControlLabel, FormLabel, Radio, RadioGroup, Slider, Stack } from "@mui/material";
 
-const formControl =
-    {
-        margin: 1,
-        minWidth: 220,
-        backgroundColor: "rgb(255, 255, 255)"
-    };
+const formControl = {
+  width: "100%",
+};
 
 export default function FilterMoviesCard(props) {
+  const { data, error, isLoading, isError } = useQuery("genres", getGenres);
 
-    const { data, error, isLoading, isError } = useQuery("genres", getGenres);
+  if (isLoading) {
+    return <Spinner />;
+  }
 
-    if (isLoading) {
-        return <Spinner />;
-    }
+  if (isError) {
+    return <h1>{error.message}</h1>;
+  }
 
-    if (isError) {
-        return <h1>{error.message}</h1>;
-    }
-    const genres = data.genres;
-    if (genres[0].name !== "All"){
-        genres.unshift({ id: "0", name: "All" });
-    }
+  const genres = data.genres;
+  if (genres[0].name !== "All") {
+    genres.unshift({ id: "0", name: "All" });
+  }
 
-    const handleChange = (e, type, value) => {
-        e.preventDefault();
-        props.onUserInput(type, value); // NEW
-    };
+  return (
+    <Card variant="outlined" className="fade-in" sx={{ borderRadius: 4 }}>
+      <CardContent>
+        <Typography variant="h6" component="h2" sx={{ mb: 2, display: "flex", alignItems: "center", gap: 1 }}>
+          <SearchIcon /> Filter Movies
+        </Typography>
 
-    const handleTextChange = (e, props) => {
-        handleChange(e, "name", e.target.value);
-    };
+        <Stack spacing={2.2}>
+          <TextField
+            sx={formControl}
+            id="movie-search-field"
+            label="Search title"
+            variant="outlined"
+            value={props.titleFilter}
+            onChange={(e) => props.onUserInput("name", e.target.value)}
+          />
 
-    const handleGenreChange = (e) => {
-        handleChange(e, "genre", e.target.value);
-    };
+          <FormControl sx={formControl}>
+            <InputLabel id="genre-label">Genre</InputLabel>
+            <Select
+              labelId="genre-label"
+              id="genre-select"
+              label="Genre"
+              value={props.genreFilter}
+              onChange={(e) => props.onUserInput("genre", e.target.value)}
+            >
+              {genres.map((genre) => (
+                <MenuItem key={genre.id} value={genre.id}>
+                  {genre.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-    const handleRatingChange = (e, props) => {
-        handleChange(e, "rating", e.target.value);
-    };
-    const handlePopularityChange = (e, props) => {
-        handleChange(e, "popularity", e.target.value);
-    };
-    return (
-        <Card
-            sx={{
-                backgroundColor: "rgb(204, 204, 0)"
-            }}
-            variant="outlined">
-            <CardContent>
-                <Typography variant="h5" component="h1">
-                    <SearchIcon fontSize="large" />
-                    Filter the movies.
-                </Typography>
-                <TextField
-                    sx={{...formControl}}
-                    id="filled-search"
-                    label="Search field"
-                    type="search"
-                    variant="filled"
-                    value={props.titleFilter}
-                    onChange={handleTextChange}
-                />
-                <FormControl sx={{...formControl}}>
-                    <InputLabel id="genre-label">Genre</InputLabel>
-                    <Select
-                        labelId="genre-label"
-                        id="genre-select"
-                        defaultValue=""
-                        value={props.genreFilter}
-                        onChange={handleGenreChange}
-                    >
-                        {genres.map((genre) => {
-                            return (
-                                <MenuItem key={genre.id} value={genre.id}>
-                                    {genre.name}
-                                </MenuItem>
-                            );
-                        })}
-                    </Select>
-                </FormControl>
+          <TextField
+            sx={formControl}
+            id="movie-year-field"
+            label="Release year from"
+            type="number"
+            inputProps={{ min: 1900, max: new Date().getFullYear() }}
+            value={props.yearFilter}
+            onChange={(e) => props.onUserInput("year", e.target.value)}
+          />
 
-                <Typography variant="h5" component="h1">
-                    Minimum rating
-                </Typography>
-                <Slider
-                    aria-label="Rating"
-                    value={props.ratingFilter}
-                    onChange={handleRatingChange}
-                    defaultValue={0}
-                    valueLabelDisplay="auto"
-                    shiftStep={1}
-                    step={0.5}
-                    marks
-                    min={0}
-                    max={10}
-                    sx={{
-                        color: 'white', // Changes the slider track and thumb color to red
-                        '& .MuiSlider-thumb': {
-                            borderColor: 'orange', // Adjust thumb border color
-                        },
-                        '& .MuiSlider-valueLabel': {
-                            backgroundColor: 'red', // Change value label background color
-                        },
-                    }}
-                />
-                <FormControl>
-                    <FormLabel id="demo-radio-buttons-group-label">Popularity</FormLabel>
-                    <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue="all"
-                        value={props.popularityFilter}
-                        onChange={handlePopularityChange}
-                        name="radio-buttons-group"
-                    >
-                        <FormControlLabel value="all" control={<Radio />} label="All" />
-                        <FormControlLabel value="popular" control={<Radio />} label="Popular" />
-                        <FormControlLabel value="hype" control={<Radio />} label="Hype" />
-                    </RadioGroup>
-                </FormControl>
-
-            </CardContent>
-            <CardMedia
-                sx={{ height: 300 }}
-                image={img}
-                title="Filter"
+          <div>
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              Minimum Rating
+            </Typography>
+            <Slider
+              aria-label="Rating"
+              value={Number(props.ratingFilter)}
+              onChange={(_, value) => props.onUserInput("rating", value)}
+              valueLabelDisplay="auto"
+              step={0.5}
+              min={0}
+              max={10}
+              color="secondary"
             />
-            <CardContent>
-                <Typography variant="h5" component="h1">
-                    <SearchIcon fontSize="large" />
-                    Filter the movies.
-                    <br />
-                </Typography>
-            </CardContent>
-        </Card>
-    );
+          </div>
+
+          <FormControl>
+            <FormLabel>Popularity</FormLabel>
+            <RadioGroup
+              value={props.popularityFilter}
+              onChange={(e) => props.onUserInput("popularity", e.target.value)}
+              name="popularity-options"
+            >
+              <FormControlLabel value="all" control={<Radio />} label="All" />
+              <FormControlLabel value="popular" control={<Radio />} label="Popular" />
+              <FormControlLabel value="hype" control={<Radio />} label="Hype" />
+            </RadioGroup>
+          </FormControl>
+
+          <FormControl sx={formControl}>
+            <InputLabel id="sort-by-label">Sort by</InputLabel>
+            <Select
+              labelId="sort-by-label"
+              id="sort-by-select"
+              label="Sort by"
+              value={props.sortBy}
+              onChange={(e) => props.onUserInput("sort", e.target.value)}
+            >
+              <MenuItem value="popularity_desc">Popularity (High to Low)</MenuItem>
+              <MenuItem value="rating_desc">Rating (High to Low)</MenuItem>
+              <MenuItem value="release_desc">Newest First</MenuItem>
+              <MenuItem value="title_asc">Title (A-Z)</MenuItem>
+            </Select>
+          </FormControl>
+        </Stack>
+      </CardContent>
+    </Card>
+  );
 }

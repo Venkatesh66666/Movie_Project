@@ -5,7 +5,9 @@ import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
 import AddToFavoritesIcon from '../components/cardIcons/addToFavorites'
 import AddToWatchIcon from "../components/cardIcons/addToWatch";
+import WriteReviewIcon from "../components/cardIcons/writeReview";
 import {useParams} from "react-router-dom";
+import usePrefetchPageQueries from "../hooks/usePrefetchPageQueries";
 
 const PlayingMoviesPage = (props) => {
 
@@ -15,6 +17,7 @@ const PlayingMoviesPage = (props) => {
         pageNumber=1;
     }
     const {  data, error, isLoading, isError }  = useQuery(['playing', { pageNumber }], getPlayingMovies)
+    usePrefetchPageQueries({ baseKey: "playing", pageNumber, fetcher: getPlayingMovies });
 
     if (isLoading) {
         return <Spinner />
@@ -24,11 +27,6 @@ const PlayingMoviesPage = (props) => {
         return <h1>{error.message}</h1>
     }
     const playingMovies = data.results;
-
-    // Redundant, but necessary to avoid app crashing.
-    const favorites = playingMovies.filter(m => m.favorite)
-    localStorage.setItem('favorites', JSON.stringify(favorites))
-    //const addToFavorites = (movieId) => true
 
     return (
         <PageTemplate
@@ -42,6 +40,7 @@ const PlayingMoviesPage = (props) => {
                     <>
                         <AddToFavoritesIcon movie={movie} />
                         <AddToWatchIcon movie={movie} />
+                        <WriteReviewIcon movie={movie} />
                     </>
                 );
             }}

@@ -1,14 +1,12 @@
 import React from "react";
-import Grid from "@mui/material/Grid2";
+import Box from "@mui/material/Box";
 
-const TemplatePersonPage = ({ person, children }) => {
+const TemplatePersonPage = ({ children }) => {
 
     return (
-        <>
-                <Grid size={{xs: 9}}>
-                    {children}
-                </Grid>
-        </>
+        <Box className="fade-in">
+            {children}
+        </Box>
     );
 };
 

@@ -8,10 +8,10 @@ const PeopleList = (props) => {
     let list = props.people.map((p) => (
         <TableRow
             key={p.name}
-            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: "rgba(61, 217, 214, 0.06)" } }}
         >
             <TableCell component="th" scope="row">
-                <Link to={`/people/${p.id}`}>{p.name}</Link>
+                <Link to={`/people/${p.id}`} style={{fontWeight: 700}}>{p.name}</Link>
             </TableCell>
             <TableCell align="right">{p.known_for_department}</TableCell>
             <TableCell align="right">{p.popularity}</TableCell>

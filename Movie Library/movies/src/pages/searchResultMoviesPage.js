@@ -5,7 +5,9 @@ import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
 import AddToFavoritesIcon from '../components/cardIcons/addToFavorites'
 import AddToWatchIcon from "../components/cardIcons/addToWatch";
+import WriteReviewIcon from "../components/cardIcons/writeReview";
 import {useParams} from "react-router-dom";
+import usePrefetchPageQueries from "../hooks/usePrefetchPageQueries";
 
 const SearchResultMoviesPage = ( props ) => {
 
@@ -17,11 +19,17 @@ const SearchResultMoviesPage = ( props ) => {
         pageNumber=1;
     }
 
-    console.log("Page Title value",title)
     const { data, error, isLoading, isError } = useQuery(
         ["searchResult", { title }, { pageNumber }],
         searchForMovies
     );
+    usePrefetchPageQueries({
+        baseKey: "searchResult",
+        extraKeyParts: [{ title }],
+        pageNumber,
+        fetcher: searchForMovies,
+        enabled: Boolean(title),
+    });
 
 
     if (isLoading) {
@@ -32,11 +40,6 @@ const SearchResultMoviesPage = ( props ) => {
         return <h1>{error.message}</h1>
     }
     const resultMovies = data.results;
-
-    // Redundant, but necessary to avoid app crashing.
-    //const favorites = resultMovies.filter(m => m.favorite)
-    //localStorage.setItem('favorites', JSON.stringify(favorites))
-    //const addToFavorites = (movieId) => true
 
     return (
         <PageTemplate
@@ -50,6 +53,7 @@ const SearchResultMoviesPage = ( props ) => {
                     <>
                         <AddToFavoritesIcon movie={movie} />
                         <AddToWatchIcon movie={movie} />
+                        <WriteReviewIcon movie={movie} />
                     </>
                 );
             }}

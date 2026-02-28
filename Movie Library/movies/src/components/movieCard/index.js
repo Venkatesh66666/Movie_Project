@@ -1,4 +1,4 @@
-import React, { useContext} from "react";
+import React, { useContext } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -9,92 +9,77 @@ import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
-//import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid2";
-import img from '../../images/film-poster-placeholder.png'
 import { Link } from "react-router-dom";
-import Avatar from '@mui/material/Avatar';
+import Avatar from "@mui/material/Avatar";
 import { MoviesContext } from "../../contexts/moviesContext";
+import { getPosterFallbackDataUri } from "../../util";
 
-export default function MovieCard({ movie, action }) {
-    const { favorites } = useContext(MoviesContext);
+export default function MovieCard({ movie, action, index = 0 }) {
+  const { favorites } = useContext(MoviesContext);
+  const isFavorite = favorites.find((id) => id === movie.id);
+  const rating = Number(movie.vote_average || 0).toFixed(1);
 
-    if (favorites.find((id) => id === movie.id)) {
-        movie.favorite = true;
-    } else {
-        movie.favorite = false
-    }
-
-    /*const handleAddToFavorite = (e) => {
-        e.preventDefault();
-        addToFavorites(movie);
-    };*/
-
-    return (
-        <Card
-  sx={{
-    height: "100%",
-    background: "rgba(255, 255, 255, 0.12)",
-    backdropFilter: "blur(12px)",
-    borderRadius: "16px",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
-    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-    "&:hover": {
-      transform: "translateY(-10px) scale(1.03)",
-      boxShadow: "0 20px 45px rgba(0,0,0,0.8)",
-    },
-  }}
->
-
-            <CardHeader
-                avatar={
-                    movie.favorite ? (
-                        <Avatar sx={{ backgroundColor: 'red' }}>
-                            <FavoriteIcon />
-                        </Avatar>
-                    ) : null
-                }
-                title={
-                    <Typography variant="h5" component="p">
-                        {movie.title}{" "}
-                    </Typography>
-                }
-            />
-            <CardMedia
-                sx={{ height: 500 }}
-                image={
-                    movie.poster_path
-                        ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-                        : img
-                }
-            />
-            <CardContent>
-                <Grid container>
-                    <Grid size={{xs: 6}}>
-                        <Typography variant="h6" component="p">
-                            <CalendarIcon fontSize="small" />
-                            {movie.release_date}
-                        </Typography>
-                    </Grid>
-                    <Grid size={{xs: 6}}>
-                        <Typography variant="h6" component="p">
-                            <StarRateIcon fontSize="small" />
-                            {"  "} {movie.vote_average}{" "}
-                        </Typography>
-                    </Grid>
-                </Grid>
-            </CardContent>
-            <CardActions disableSpacing>
-
-                {action(movie)}
-
-                <Link to={`/movies/${movie.id}`}>
-                    <Button variant="outlined" size="medium" color="primary">
-                        More Info ...
-                    </Button>
-                </Link>
-
-            </CardActions>
-        </Card>
-    );
+  return (
+    <Card
+      className="fade-in"
+      sx={{
+        animationDelay: `${Math.min(index * 60, 520)}ms`,
+        height: "100%",
+        borderRadius: "18px",
+        display: "flex",
+        flexDirection: "column",
+        transition: "transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease",
+        "&:hover": {
+          transform: "translateY(-6px)",
+          boxShadow: "0 20px 35px rgba(0, 0, 0, 0.3)",
+          borderColor: "rgba(61, 217, 214, 0.45)",
+        },
+      }}
+    >
+      <CardHeader
+        avatar={
+          isFavorite ? (
+            <Avatar sx={{ backgroundColor: "secondary.main" }}>
+              <FavoriteIcon sx={{ color: "#261300" }} />
+            </Avatar>
+          ) : null
+        }
+        title={
+          <Typography variant="h6" component="p" sx={{ fontWeight: 700 }}>
+            {movie.title}
+          </Typography>
+        }
+      />
+      <CardMedia
+        component="img"
+        loading="lazy"
+        sx={{ height: 440, objectFit: "cover" }}
+        image={movie.poster_path ? `https://image.tmdb.org/t/p/w342/${movie.poster_path}` : getPosterFallbackDataUri(movie.title)}
+        alt={movie.title}
+      />
+      <CardContent sx={{ pb: 1 }}>
+        <Grid container>
+          <Grid size={{ xs: 6 }}>
+            <Typography variant="body1">
+              <CalendarIcon fontSize="small" /> {movie.release_date || "N/A"}
+            </Typography>
+          </Grid>
+          <Grid size={{ xs: 6 }}>
+            <Typography variant="body1" sx={{ textAlign: "right" }}>
+              <StarRateIcon fontSize="small" /> {rating}
+            </Typography>
+          </Grid>
+        </Grid>
+      </CardContent>
+      <CardActions sx={{ px: 2, pb: 2, pt: 0, gap: 1, mt: "auto", flexWrap: "wrap" }}>
+        {action(movie)}
+        <Link to={`/movies/${movie.id}`}>
+          <Button variant="contained" size="medium" color="primary">
+            More Info
+          </Button>
+        </Link>
+      </CardActions>
+    </Card>
+  );
 }

@@ -26,17 +26,18 @@ export default function CreditsPage({ movieId }) {
     const credits = data.cast;
 
     return (
-        <div style={{padding: "20px"}}>
+        <div className="fade-in" style={{padding: "8px"}}>
             <Typography variant="h4" gutterBottom>
                 Cast & Credits
             </Typography>
             <Grid container spacing={4}>
                 {credits.map((c) => (
                     <Grid item xs={12} sm={6} md={4} lg={3} key={c.id}>
-                        <Card sx={{width:"180px", display: "flex", flexDirection: "column"}}>
+                        <Card sx={{width:"100%", display: "flex", flexDirection: "column", borderRadius: 3}}>
                             <CardMedia
                                 component="img"
                                 height="300"
+                                loading="lazy"
                                 image={
                                     c.profile_path
                                         ? `https://image.tmdb.org/t/p/w200${c.profile_path}`
@@ -50,7 +51,6 @@ export default function CreditsPage({ movieId }) {
                                         to={`/people/${c.id}`}
                                         style={{
                                             textDecoration: "underline",
-                                            color: "#070c44",
                                         }}
                                     >
                                         {c.name}

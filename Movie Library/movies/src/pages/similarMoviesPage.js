@@ -5,6 +5,7 @@ import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
 import AddToFavoritesIcon from '../components/cardIcons/addToFavorites'
 import AddToWatchIcon from "../components/cardIcons/addToWatch";
+import WriteReviewIcon from "../components/cardIcons/writeReview";
 import {useParams, useLocation} from "react-router-dom";
 
 const SimilarMoviesPage = (props) => {
@@ -12,8 +13,6 @@ const SimilarMoviesPage = (props) => {
     const { id } = useParams();
     const location = useLocation();
     const movieId = id || location.state.movieId;
-
-    console.log("Movie ID:", movieId);
 
     // fetching the details of the movie
     const { data: movie, error: movieError, isLoading: isTheMovieLoading, isError: isThereMovieError } = useQuery(
@@ -50,6 +49,7 @@ const SimilarMoviesPage = (props) => {
                 return <>
                     <AddToFavoritesIcon movie={movie} />
                     <AddToWatchIcon movie={movie} />
+                    <WriteReviewIcon movie={movie} />
                 </>
             }}
         />

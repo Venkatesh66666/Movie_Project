@@ -45,6 +45,70 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
+## Private Visitor Analytics (Owner Only)
+
+This project supports Google Analytics 4 (GA4) page-visit tracking.
+
+### 1. Create your GA4 property
+
+1. Go to Google Analytics and create a property.
+2. Create a Web Data Stream for your site.
+3. Copy the Measurement ID (format: `G-XXXXXXXXXX`).
+
+### 2. Configure your local environment
+
+Create/update `.env` in the project root:
+
+```env
+REACT_APP_TMDB_KEY=your_tmdb_key
+REACT_APP_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+### 3. Run/build the app
+
+- Dev: `npm start`
+- Production build: `npm run build`
+
+Note:
+- Analytics events are enabled in production mode only.
+- If `REACT_APP_GA_MEASUREMENT_ID` is missing, no analytics script is loaded.
+
+### 4. See visitor data
+
+Open your Google Analytics dashboard (your account only).  
+Visitors cannot see this dashboard unless you share access.
+
+## Free Deployment (Done Setup)
+
+This project is now pre-configured for Netlify deployment:
+
+- `netlify.toml` added
+- `public/_redirects` added for React Router refresh support
+- `.env.example` added for required keys
+
+### Step-by-step (Netlify)
+
+1. Push this `movies` folder to GitHub.
+2. Open Netlify: https://app.netlify.com
+3. `Add new site` -> `Import an existing project` -> select your repo.
+4. Build settings (auto-detected from `netlify.toml`):
+   - Build command: `npm run build`
+   - Publish directory: `build`
+5. In Netlify project settings -> Environment variables, add:
+   - `REACT_APP_TMDB_KEY`
+   - `REACT_APP_GA_MEASUREMENT_ID` (optional)
+6. Click `Deploy site`.
+
+Example:
+
+- Repo: `https://github.com/yourname/acx-movie-library`
+- Deployed URL: `https://acx-movie-library.netlify.app`
+
+### Important
+
+- Do not commit your real `.env` file.
+- Use `.env.example` as reference.
+
 ### Code Splitting
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)

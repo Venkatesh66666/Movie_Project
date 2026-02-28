@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import MovieDetails from "../components/movieDetails/";
 import PageTemplate from "../components/templateMoviePage";
 import { getLatestMovie } from '../api/tmdb-api'
 import { useQuery } from "react-query";
 import Spinner from '../components/spinner'
+import { MoviesContext } from "../contexts/moviesContext";
 // import useMovie from "../hooks/useMovie";   Redundant
 
 const LatestMoviePage = () => {
+    const { addRecentlyViewed, addViewedMovieInsights } = useContext(MoviesContext);
     //console.log(id)
 
     /*const movieQuery = (id === "latest") ? useQuery("latestMovie", getLatestMovie) :
@@ -23,6 +25,13 @@ const LatestMoviePage = () => {
         ["movie"],
         getLatestMovie
     );
+
+    useEffect(() => {
+        if (movie) {
+            addRecentlyViewed(movie);
+            addViewedMovieInsights(movie);
+        }
+    }, [addRecentlyViewed, addViewedMovieInsights, movie]);
     
     if (isLoading) {
         return <Spinner />;
@@ -31,7 +40,6 @@ const LatestMoviePage = () => {
     if (isError) {
         return <h1>{error.message}</h1>;
     }
-
 
 
     return (

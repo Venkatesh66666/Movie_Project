@@ -86,14 +86,20 @@ const ReviewForm = ({ movie }) => {
 
     const handleSnackClose = (event) => {
         setOpen(false);
-        navigate("/movies/favorites");
+        navigate(`/movies/${movie.id}`);
     };
     const onSubmit = (review) => {
-        review.movieId = movie.id;
-        review.rating = rating;
-        // console.log(review);
-        context.addReview(movie, review);
-        setOpen(true); // NEW
+        const payload = {
+            id: `my-review-${movie.id}-${Date.now()}`,
+            movieId: movie.id,
+            author: review.author,
+            content: review.review,
+            rating: Number(rating),
+            createdAt: new Date().toISOString(),
+            source: "user",
+        };
+        context.addReview(movie, payload);
+        setOpen(true);
     };
 
     return (
@@ -214,7 +220,7 @@ const ReviewForm = ({ movie }) => {
                         onClick={() => {
                             reset({
                                 author: "",
-                                content: "",
+                                review: "",
                             });
                         }}
                     >

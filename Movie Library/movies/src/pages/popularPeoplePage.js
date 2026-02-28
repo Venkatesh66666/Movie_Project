@@ -4,6 +4,7 @@ import PageTemplate from '../components/templatePeopleListPage';
 import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
 import {useParams} from "react-router-dom";
+import usePrefetchPageQueries from "../hooks/usePrefetchPageQueries";
 
 const PopularPeoplePage = (props) => {
 
@@ -13,6 +14,7 @@ const PopularPeoplePage = (props) => {
         pageNumber=1;
     }
     const {  data, error, isLoading, isError }  = useQuery(['popularPeople', { pageNumber }], getPopularPeople)
+    usePrefetchPageQueries({ baseKey: "popularPeople", pageNumber, fetcher: getPopularPeople });
 
     if (isLoading) {
         return <Spinner />
@@ -22,11 +24,6 @@ const PopularPeoplePage = (props) => {
         return <h1>{error.message}</h1>
     }
     const popularPeople = data.results;
-
-    // Redundant, but necessary to avoid app crashing.
-    //const favorites = playingMovies.filter(m => m.favorite)
-    //localStorage.setItem('favorites', JSON.stringify(favorites))
-    //const addToFavorites = (movieId) => true
 
     return (
         <PageTemplate

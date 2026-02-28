@@ -4,34 +4,38 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 
-const Header = (props ) => {
-    const title = props.title
-    const navigate = useNavigate();
-    return (
-        <Paper
-            component="div"
-            sx={{
-                display: "flex",
-                justifyContent: "space-around",
-                flexWrap: "wrap",
-                marginBottom: 1.5,
-            }}
-        >
-            <IconButton aria-label="go back" onClick={() => navigate(-1)}>
-                <ArrowBackIcon color="primary" fontSize="large" />
-            </IconButton>
+const Header = ({ title }) => {
+  const navigate = useNavigate();
 
-            <Typography variant="h4" component="h3">
-                {title}
-            </Typography>
+  return (
+    <Paper
+      className="fade-in"
+      component="header"
+      sx={{
+        px: { xs: 1.5, sm: 2.5 },
+        py: 1.2,
+        mb: 2.5,
+        borderRadius: 3,
+      }}
+    >
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <IconButton aria-label="go back" onClick={() => navigate(-1)}>
+          <ArrowBackIcon color="primary" />
+        </IconButton>
 
-            <IconButton aria-label="go forward" onClick={() => navigate(+1)}>
-                <ArrowForwardIcon color="primary" fontSize="large" />
-            </IconButton>
-        </Paper>
-    );
+        <Typography variant="h4" component="h1" sx={{ textAlign: "center", px: 1 }}>
+          {title}
+        </Typography>
+
+        <IconButton aria-label="go forward" onClick={() => navigate(1)}>
+          <ArrowForwardIcon color="primary" />
+        </IconButton>
+      </Box>
+    </Paper>
+  );
 };
 
 export default Header;
